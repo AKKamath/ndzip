@@ -1,14 +1,15 @@
 #pragma once
-
 #include "cuda_bits.cuh"
 #include "gpu_common.hh"
+
+#include <ndzip/cuda.hh>
+#include <ndzip/offload.hh>
+
+#undef __noinline__
 
 #include <numeric>
 #include <stdexcept>
 #include <vector>
-
-#include <ndzip/cuda.hh>
-#include <ndzip/offload.hh>
 
 
 namespace ndzip::detail::gpu_cuda {
@@ -91,7 +92,9 @@ forward_transform_lanes(hypercube_block<Profile> block, hypercube_ptr<Profile, f
     }
 
     distribute_for<layout::num_lanes>(block, [&](index_type lane, index_type iteration) {
-        bits_type a = needs_carry ? carry[iteration] : 0;
+        bits_type a = 0;
+        if constexpr(needs_carry)
+            a = carry[iteration];
         index_type index = accessor::offset(lane);
         for (index_type i = 0; i < layout::lane_length; ++i) {
             auto b = hc.load(index);

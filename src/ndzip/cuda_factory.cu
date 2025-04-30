@@ -1,5 +1,5 @@
 #include "cuda_codec.inl"
-
+#include "cuda_fp16.h"
 
 template<typename T>
 std::unique_ptr<ndzip::cuda_compressor<T>>

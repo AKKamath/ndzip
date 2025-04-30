@@ -166,6 +166,7 @@ if (NDZIP_USE_CUDA)
     list(JOIN NDZIP_CUDA_FLAGS " " NDZIP_CUDA_FLAGS_STRING)
     set_target_properties(ndzip-cuda PROPERTIES COMPILE_FLAGS "${NDZIP_CUDA_FLAGS_STRING}")
     target_link_libraries(ndzip-cuda PUBLIC ndzip)
+    target_link_libraries(ndzip-cuda PRIVATE OpenMP::OpenMP_CXX Boost::thread)
 endif ()
 
 add_library(io STATIC
